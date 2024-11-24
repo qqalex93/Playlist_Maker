@@ -1,13 +1,10 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,12 +15,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val mediaButton = findViewById<Button>(R.id.media_button)
         val settingsButton = findViewById<Button>(R.id.settings_button)
 
-        val searchButtonClickListener: View.OnClickListener = object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                Toast.makeText(this@MainActivity, "Не нажимай кнопку \"Настройки\"", Toast.LENGTH_SHORT).show()
-            }
+        searchButton.setOnClickListener {
+            val searchIntent = Intent(this, SearchActivity::class.java)
+            startActivity(searchIntent)
         }
-        searchButton.setOnClickListener(searchButtonClickListener)
         mediaButton.setOnClickListener(this)
         settingsButton.setOnClickListener(this)
 
@@ -31,10 +26,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.media_button -> {
-                Toast.makeText(this, "Смотри значение кнопки выше", Toast.LENGTH_SHORT).show()
+                val mediaIntent = Intent(this, MediaActivity::class.java)
+                startActivity(mediaIntent)
             }
             R.id.settings_button -> {
-                Toast.makeText(this, "Ну вот и зачем, спрашивается?", Toast.LENGTH_SHORT).show()
+                val settingsIntent = Intent(this, SettingsActivity::class.java)
+                startActivity(settingsIntent)
             }
         }
 
