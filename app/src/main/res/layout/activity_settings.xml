@@ -25,11 +25,12 @@
                 android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/checked"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:backgroundTint="@color/white"
-                    android:src="@drawable/back" />
+                    android:src="@drawable/back"
+                    app:tint="@color/black" />
 
             </FrameLayout>
 
@@ -77,9 +78,12 @@
             android:layout_gravity="center"
             tools:ignore="UseSwitchCompatOrMaterialXml">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:thumbTint="@color/switch_thumb"
+                app:trackTint="@color/switch_track"
                 android:layout_gravity="center"
                 android:checked="false" />
         </FrameLayout>

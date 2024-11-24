@@ -3,4 +3,6 @@
     <color name="black">#FFFFFFFF</color>
     <color name="white">#FF000000</color>
     <color name="blue">#FF000000</color>
+    <color name="switch_thumb">#3772E7</color>
+    <color name="switch_track">#9FBBF3</color>
 </resources>
