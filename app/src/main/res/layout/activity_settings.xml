@@ -8,184 +8,45 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_24">
-
-        <LinearLayout
-            android:layout_width="304dp"
-            android:layout_height="48dp"
-            android:layout_marginVertical="@dimen/margin_4"
-            android:layout_marginStart="@dimen/margin_4"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
-
-
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="@dimen/margin_48"
-                android:layout_height="@dimen/margin_48"
-                android:layout_gravity="center"
-                android:scaleType="center"
-                android:src="@drawable/back"
-                app:tint="@color/black" />
-
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="@dimen/margin_4"
-                android:layout_marginEnd="@dimen/margin_48">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/margin_12"
-                    android:gravity="center"
-                    android:text="@string/settings_button"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_22" />
-            </FrameLayout>
-
-        </LinearLayout>
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/settings_toolbar"
+        style="@style/Toolbar"
+        app:navigationIcon="@drawable/back"
+        app:navigationIconTint="@color/black">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginTop="@dimen/margin_21"
-            android:layout_marginBottom="@dimen/margin_21"
-            android:layout_weight="1"
-            android:text="@string/dark_mode"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_16">
+            style="@style/ToolbarTitle"
+            android:text="@string/settings_button"
+            android:textColor="@color/black" />
 
-        </TextView>
 
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            tools:ignore="UseSwitchCompatOrMaterialXml">
+    </com.google.android.material.appbar.MaterialToolbar>
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:checked="false"
-                app:thumbTint="@color/switch_thumb"
-                app:trackTint="@color/switch_track" />
-        </FrameLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/margin_16"
+        android:paddingVertical="@dimen/margin_20"
+        android:text="@string/dark_mode"
+        android:textSize="@dimen/text_size_16" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginTop="@dimen/margin_21"
-            android:layout_marginBottom="@dimen/margin_21"
-            android:layout_weight="1"
-            android:text="@string/share_app"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_16">
 
-        </TextView>
+    <TextView
+        android:text="@string/share_app"
+        style="@style/SettingTextView"
+        app:drawableEndCompat="@drawable/share" />
 
-        <FrameLayout
-            android:layout_width="@dimen/margin_24"
-            android:layout_height="@dimen/margin_24"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/margin_12">
+    <TextView
+        android:text="@string/write_to_support"
+        style="@style/SettingTextView"
+        app:drawableEndCompat="@drawable/support" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/share" />
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginTop="@dimen/margin_21"
-            android:layout_marginBottom="@dimen/margin_21"
-            android:layout_weight="1"
-            android:text="@string/write_to_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_16">
-
-        </TextView>
-
-        <FrameLayout
-            android:layout_width="@dimen/margin_24"
-            android:layout_height="@dimen/margin_24"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/margin_12">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/support" />
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginTop="@dimen/margin_21"
-            android:layout_marginBottom="@dimen/margin_21"
-            android:layout_weight="1"
-            android:text="@string/user_agreement"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_16">
-
-        </TextView>
-
-        <FrameLayout
-            android:layout_width="@dimen/margin_24"
-            android:layout_height="@dimen/margin_24"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/margin_12">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/next" />
-        </FrameLayout>
-    </LinearLayout>
+    <TextView
+        android:text="@string/user_agreement"
+        style="@style/SettingTextView"
+        app:drawableEndCompat="@drawable/next" />
 
 
 </LinearLayout>
