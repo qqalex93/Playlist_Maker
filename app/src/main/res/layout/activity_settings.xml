@@ -21,21 +21,23 @@
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switcher"
         style="@style/Switch"
-        android:checked="false"
         android:text="@string/dark_mode" />
 
 
     <TextView
+        android:id="@+id/share_app"
         style="@style/SettingTextView"
         android:text="@string/share_app"
         app:drawableEndCompat="@drawable/share" />
 
     <TextView
+        android:id="@+id/write_to_support"
         style="@style/SettingTextView"
         android:text="@string/write_to_support"
         app:drawableEndCompat="@drawable/support" />
 
     <TextView
+        android:id="@+id/agreement"
         style="@style/SettingTextView"
         android:text="@string/user_agreement"
         app:drawableEndCompat="@drawable/next" />
