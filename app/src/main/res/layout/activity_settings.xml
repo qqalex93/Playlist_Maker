@@ -3,49 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_settings"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    style="@style/ActivitySettings">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/settings_toolbar"
         style="@style/Toolbar"
-        app:navigationIcon="@drawable/back"
-        app:navigationIconTint="@color/black">
+        app:navigationIcon="@drawable/back">
 
         <TextView
             style="@style/ToolbarTitle"
-            android:text="@string/settings_button"
-            android:textColor="@color/black" />
+            android:text="@string/settings_button" />
 
 
     </com.google.android.material.appbar.MaterialToolbar>
 
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/margin_16"
-        android:paddingVertical="@dimen/margin_20"
-        android:text="@string/dark_mode"
-        android:textSize="@dimen/text_size_16" />
+        android:id="@+id/switcher"
+        style="@style/Switch"
+        android:checked="false"
+        android:text="@string/dark_mode" />
 
 
     <TextView
-        android:text="@string/share_app"
         style="@style/SettingTextView"
+        android:text="@string/share_app"
         app:drawableEndCompat="@drawable/share" />
 
     <TextView
-        android:text="@string/write_to_support"
         style="@style/SettingTextView"
+        android:text="@string/write_to_support"
         app:drawableEndCompat="@drawable/support" />
 
     <TextView
-        android:text="@string/user_agreement"
         style="@style/SettingTextView"
+        android:text="@string/user_agreement"
         app:drawableEndCompat="@drawable/next" />
 
 
