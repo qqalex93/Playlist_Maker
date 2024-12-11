@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_settings"
+    style="@style/ActivitySettings">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/settings_toolbar"
+        style="@style/Toolbar"
+        app:navigationIcon="@drawable/back">
+
+        <TextView
+            style="@style/ToolbarTitle"
+            android:text="@string/settings_button" />
+
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switcher"
+        style="@style/Switch"
+        android:text="@string/dark_mode" />
+
+
+    <TextView
+        android:id="@+id/share_app"
+        style="@style/SettingTextView"
+        android:text="@string/share_app"
+        app:drawableEndCompat="@drawable/share" />
+
+    <TextView
+        android:id="@+id/write_to_support"
+        style="@style/SettingTextView"
+        android:text="@string/write_to_support"
+        app:drawableEndCompat="@drawable/support" />
+
+    <TextView
+        android:id="@+id/agreement"
+        style="@style/SettingTextView"
+        android:text="@string/user_agreement"
+        app:drawableEndCompat="@drawable/next" />
+
+
+</LinearLayout>
