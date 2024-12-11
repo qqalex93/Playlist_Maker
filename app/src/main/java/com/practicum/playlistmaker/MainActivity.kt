@@ -9,7 +9,6 @@ import com.practicum.playlistmaker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-//    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -17,14 +16,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val searchButton = findViewById<Button>(R.id.search_button)
         val mediaButton = findViewById<Button>(R.id.media_button)
         val settingsButton = findViewById<Button>(R.id.settings_button)
-
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-//
-//        setContentView(binding.root)
-//
-//        binding.searchButton.setOnClickListener(this)
-//        binding.mediaButton.setOnClickListener(this)
-//        binding.settingsButton.setOnClickListener(this)
 
         searchButton.setOnClickListener(this)
         mediaButton.setOnClickListener(this)

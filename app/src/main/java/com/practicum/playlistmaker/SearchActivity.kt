@@ -93,16 +93,4 @@ class SearchActivity : AppCompatActivity() {
         private const val KEY_SEARCH_LINE_FOCUS = "SEARCH_LINE_FOCUS"
 
     }
-
-
-
-
-
-//        private fun clearButtonVisibility(s: CharSequence?): Int {
-//            return if (s.isNullOrEmpty()) {
-//                View.GONE
-//            } else {
-//                View.VISIBLE
-//            }
-//        }
 }
