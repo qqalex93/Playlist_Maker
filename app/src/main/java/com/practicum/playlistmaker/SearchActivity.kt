@@ -15,6 +15,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import com.google.android.material.internal.ViewUtils.showKeyboard
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
 
@@ -51,21 +53,12 @@ class SearchActivity : AppCompatActivity() {
             searchLine.clearFocus()
         }
 
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+        searchLine.addTextChangedListener(
+            onTextChanged = { charSequence, _, _, _ ->
+                clearButton.isVisible = !charSequence.isNullOrEmpty()
+                searchLineText = charSequence.toString()
             }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
-                searchLineText = s.toString()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-        }
-        searchLine.addTextChangedListener(textWatcher)
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -87,10 +80,10 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
+    private companion object {
 
-        private const val KEY_SEARCH_LINE_TEXT = "SEARCH_LINE_TEXT"
-        private const val KEY_SEARCH_LINE_FOCUS = "SEARCH_LINE_FOCUS"
+        const val KEY_SEARCH_LINE_TEXT = "SEARCH_LINE_TEXT"
+        const val KEY_SEARCH_LINE_FOCUS = "SEARCH_LINE_FOCUS"
 
     }
 }
