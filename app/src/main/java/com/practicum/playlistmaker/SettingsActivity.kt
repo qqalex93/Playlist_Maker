@@ -9,9 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -23,6 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         val shareApp = findViewById<TextView>(R.id.share_app)
         val writeToSupport = findViewById<TextView>(R.id.write_to_support)
         val userAgreement = findViewById<TextView>(R.id.agreement)
+        val themeSwitch = findViewById<SwitchMaterial>(R.id.switcher)
 
         toolbar.setNavigationOnClickListener {
             finish()
@@ -59,5 +62,14 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(shareIntent)
 
         }
+
+        themeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+        themeSwitch.isChecked = (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
     }
 }
