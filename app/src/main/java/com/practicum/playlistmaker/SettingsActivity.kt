@@ -25,8 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         val userAgreement = findViewById<TextView>(R.id.agreement)
 
         toolbar.setNavigationOnClickListener {
-            val backIntent = Intent(this, MainActivity::class.java)
-            startActivity(backIntent)
+            finish()
         }
 
         shareApp.setOnClickListener {
