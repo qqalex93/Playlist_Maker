@@ -1,10 +1,13 @@
 package com.practicum.playlistmaker
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -16,6 +19,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val searchButton = findViewById<Button>(R.id.search_button)
         val mediaButton = findViewById<Button>(R.id.media_button)
         val settingsButton = findViewById<Button>(R.id.settings_button)
+
 
         searchButton.setOnClickListener(this)
         mediaButton.setOnClickListener(this)
