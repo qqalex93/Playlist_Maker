@@ -2,23 +2,16 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import com.google.android.material.internal.ViewUtils.showKeyboard
-import com.practicum.playlistmaker.databinding.ActivityMainBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class SearchActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -33,11 +26,12 @@ class SearchActivity : AppCompatActivity() {
         val searchLine = findViewById<EditText>(R.id.search_line)
         val clearButton = findViewById<ImageView>(R.id.clear_search_query)
 
+
         searchToolbar.setNavigationOnClickListener {
             finish()
         }
 
-        searchLine.setOnFocusChangeListener { v, hasFocus ->
+        searchLine.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 val inputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -59,7 +53,24 @@ class SearchActivity : AppCompatActivity() {
                 searchLineText = charSequence.toString()
             }
         )
+
+        val tracks: List<Track> = listOf(
+            Track(getString(R.string.track_name1), getString(R.string.artist_name1), getString(R.string.track_time1), getString(R.string.track_link1)),
+            Track(getString(R.string.track_name2), getString(R.string.artist_name2), getString(R.string.track_time2), getString(R.string.track_link2)),
+            Track(getString(R.string.track_name3), getString(R.string.artist_name3), getString(R.string.track_time3), getString(R.string.track_link3)),
+            Track(getString(R.string.track_name4), getString(R.string.artist_name4), getString(R.string.track_time4), getString(R.string.track_link4)),
+            Track(getString(R.string.track_name5), getString(R.string.artist_name5), getString(R.string.track_time5), getString(R.string.track_link5))
+        )
+
+        val recyclerView = findViewById<RecyclerView>(R.id.rv_track_list)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val trackAdapter = TrackAdapter(tracks)
+        recyclerView.adapter = trackAdapter
     }
+
+
+
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

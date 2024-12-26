@@ -3,8 +3,8 @@ package com.practicum.playlistmaker
 data class Track(
 
     val trackName: String,
-    val artName: String,
+    val artistName: String,
     val trackTime: String,
-    val trackLink: String
+    val artworkUrl100: String
 
 )
