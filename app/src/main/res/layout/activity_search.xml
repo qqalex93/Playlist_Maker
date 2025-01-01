@@ -9,7 +9,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/search_toolbar"
         style="@style/Toolbar"
-        app:navigationIcon="@drawable/back">
+        app:navigationIcon="@drawable/ic_back_16">
 
         <TextView
             style="@style/ToolbarTitle"
@@ -29,7 +29,7 @@
 
         <ImageView
             android:id="@+id/search_icon"
-            android:src="@drawable/search_icon_14"
+            android:src="@drawable/ic_search_14"
             style="@style/SearchImageView"
             android:paddingStart="@dimen/value_4"/>
 
@@ -56,7 +56,11 @@
 
     </LinearLayout>
 
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_track_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_16"/>
 
 
 </LinearLayout>
