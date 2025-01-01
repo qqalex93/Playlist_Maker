@@ -7,7 +7,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/settings_toolbar"
         style="@style/Toolbar"
-        app:navigationIcon="@drawable/back">
+        app:navigationIcon="@drawable/ic_back_16">
 
         <TextView
             style="@style/ToolbarTitle"
@@ -26,19 +26,19 @@
         android:id="@+id/share_app"
         style="@style/SettingTextView"
         android:text="@string/share_app"
-        app:drawableEndCompat="@drawable/share" />
+        app:drawableEndCompat="@drawable/ic_share" />
 
     <TextView
         android:id="@+id/write_to_support"
         style="@style/SettingTextView"
         android:text="@string/write_to_support"
-        app:drawableEndCompat="@drawable/support" />
+        app:drawableEndCompat="@drawable/ic_support" />
 
     <TextView
         android:id="@+id/agreement"
         style="@style/SettingTextView"
         android:text="@string/user_agreement"
-        app:drawableEndCompat="@drawable/next" />
+        app:drawableEndCompat="@drawable/ic_next_24" />
 
 
 </LinearLayout>
