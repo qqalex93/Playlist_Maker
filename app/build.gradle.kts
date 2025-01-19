@@ -41,6 +41,11 @@ android {
 
 dependencies {
 
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    implementation(libs.gson)
+
     implementation(libs.material.v161)
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
