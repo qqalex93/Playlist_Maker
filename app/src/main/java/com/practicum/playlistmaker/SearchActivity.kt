@@ -22,6 +22,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.RetrofitClient.trackApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Retrofit
@@ -34,7 +35,6 @@ class SearchActivity : AppCompatActivity() {
     private var searchLineText: String = ""
     private var isResponseVisible: Boolean = false
 
-    private lateinit var trackApi: TrackApi
     private lateinit var trackAdapter: TrackAdapter
 
     private val tracks: MutableList<Track> = mutableListOf()
@@ -53,13 +53,6 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val baseUrlITunes = getString(R.string.base_url_itunes)
-        val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrlITunes)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        trackApi = retrofit.create(TrackApi::class.java)
 
         val searchToolbar = findViewById<Toolbar>(R.id.search_toolbar)
         val clearButton = findViewById<ImageView>(R.id.clear_search_query)
