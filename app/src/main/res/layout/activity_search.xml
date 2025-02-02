@@ -52,17 +52,52 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/rw_query_history_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+        
+        <TextView
+            style="@style/SearchTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_title"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/value_16"
+            android:layout_marginTop="@dimen/value_42"
+            android:layout_marginBottom="@dimen/value_20"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_history_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/clear_history_btn"
+            style="@style/UpdateButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_24"
+            android:layout_gravity="center"
+            android:text="@string/clear_history_btn"/>
+
+    </LinearLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_track_list"
+            android:id="@+id/rw_track_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/value_16" />
 
         <LinearLayout
+            android:id="@+id/wg_error_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"

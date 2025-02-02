@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -36,14 +37,17 @@ class SearchActivity : AppCompatActivity() {
     private var isResponseVisible: Boolean = false
 
     private lateinit var trackAdapter: TrackAdapter
+    private lateinit var historyAdapter: TrackAdapter
 
     private val tracks: MutableList<Track> = mutableListOf()
 
     private lateinit var searchLine: EditText
     private lateinit var trackRecyclerView: RecyclerView
+    private lateinit var wgErrorSearch: LinearLayout
     private lateinit var errorImage: ImageView
     private lateinit var errorMessage: TextView
     private lateinit var updateErrorButton: Button
+    private lateinit var searchHistory: SearchHistory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +61,16 @@ class SearchActivity : AppCompatActivity() {
         val searchToolbar = findViewById<Toolbar>(R.id.search_toolbar)
         val clearButton = findViewById<ImageView>(R.id.clear_search_query)
         searchLine = findViewById(R.id.search_line)
-        trackRecyclerView = findViewById(R.id.rv_track_list)
+        trackRecyclerView = findViewById(R.id.rw_track_list)
+        wgErrorSearch = findViewById(R.id.wg_error_search)
         errorImage = findViewById(R.id.iw_error_search_result)
         errorMessage = findViewById(R.id.tw_error_search_message)
         updateErrorButton = findViewById(R.id.error_search_button)
 
+        searchHistory = SearchHistory((applicationContext as AppThemeMode).sharedPreferences)
+        val rwHistory = findViewById<RecyclerView>(R.id.search_history_list)
+        val wgHistory = findViewById<LinearLayout>(R.id.rw_query_history_list)
+        val clearHistoryBtn = findViewById<Button>(R.id.clear_history_btn)
 
         searchToolbar.setNavigationOnClickListener {
             finish()
@@ -73,15 +82,17 @@ class SearchActivity : AppCompatActivity() {
                     getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 inputMethodManager?.showSoftInput(searchLine, InputMethodManager.SHOW_IMPLICIT)
             }
+            wgHistory.visibility =
+                if (hasFocus && searchLine.text.isEmpty() && historyAdapter.tracks.size != 0)
+                    View.VISIBLE
+            else View.GONE
         }
 
         searchLine.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 trackSearch()
-                val inputMethodManager =
-                    getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                inputMethodManager?.hideSoftInputFromWindow(searchLine.windowToken, 0)
-                searchLine.clearFocus()
+                clearFocusEditText()
+                isResponseVisible = true
                 true
             }
             false
@@ -89,10 +100,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             searchLine.setText("")
-            val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(searchLine.windowToken, 0)
-            searchLine.clearFocus()
+            clearFocusEditText()
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
             showErrorMessage("", false)
@@ -105,15 +113,40 @@ class SearchActivity : AppCompatActivity() {
             onTextChanged = { charSequence, _, _, _ ->
                 clearButton.isVisible = !charSequence.isNullOrEmpty()
                 searchLineText = charSequence.toString()
+                wgHistory.visibility = if (searchLine.hasFocus() && charSequence?.isEmpty() == true &&
+                    historyAdapter.tracks.size != 0) View.VISIBLE else View.GONE
+                wgErrorSearch.visibility = View.GONE
             },
             afterTextChanged = {
                 isResponseVisible = false
             }
         )
 
-        trackRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        clearHistoryBtn.setOnClickListener {
+            searchHistory.clearSearchHistory()
+            historyAdapter.tracks.clear()
+            historyAdapter.notifyDataSetChanged()
+            wgHistory.visibility = View.GONE
+            clearFocusEditText()
+        }
 
-        trackAdapter = TrackAdapter()
+        historyAdapter = TrackAdapter {
+            addTrackToHistory(it)
+        }
+        historyAdapter.tracks = searchHistory.getTrackFromHistory().toMutableList()
+        rwHistory.layoutManager = LinearLayoutManager(
+            this, LinearLayoutManager.VERTICAL,
+            false
+        )
+        rwHistory.adapter = historyAdapter
+
+        trackRecyclerView.layoutManager = LinearLayoutManager(
+            this, LinearLayoutManager.VERTICAL,
+            false)
+
+        trackAdapter = TrackAdapter {
+            addTrackToHistory(it)
+        }
         trackAdapter.tracks = tracks
         trackRecyclerView.adapter = trackAdapter
 
@@ -129,11 +162,13 @@ class SearchActivity : AppCompatActivity() {
                 showErrorImage(R.drawable.ic_bad_connection_dm, R.drawable.ic_bad_connection_nm)
                 errorMessage.text = getString(R.string.bad_connection_message)
                 errorMessage.visibility = View.VISIBLE
+                wgErrorSearch.visibility = View.VISIBLE
                 updateErrorButton.visibility = View.VISIBLE
             } else {
                 showErrorImage(R.drawable.ic_error_search_result_dm, R.drawable.ic_error_search_result_nm)
                 errorMessage.text = getString(R.string.nothing_found_message)
                 errorMessage.visibility = View.VISIBLE
+                wgErrorSearch.visibility = View.VISIBLE
                 updateErrorButton.visibility = View.GONE
             }
             tracks.clear()
@@ -177,6 +212,19 @@ class SearchActivity : AppCompatActivity() {
                 showErrorMessage(getString(R.string.bad_connection_message), true)
             }
         })
+    }
+
+    private fun addTrackToHistory(track: Track) {
+        searchHistory.saveTrack(track)
+        historyAdapter.tracks = searchHistory.getTrackFromHistory().toMutableList()
+        historyAdapter.notifyDataSetChanged()
+        clearFocusEditText()
+    }
+
+    private fun clearFocusEditText() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(searchLine.windowToken, 0)
+        searchLine.clearFocus()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

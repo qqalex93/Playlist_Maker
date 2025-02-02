@@ -18,5 +18,7 @@
     <string name="bad_connection_message">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="update_button">Обновить</string>
     <string name="base_url_itunes">https://itunes.apple.com</string>
+    <string name="clear_history_btn">Очистить историю</string>
+    <string name="search_title">Вы искали</string>
 
 </resources>

@@ -25,7 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         val shareApp = findViewById<TextView>(R.id.share_app)
         val writeToSupport = findViewById<TextView>(R.id.write_to_support)
         val userAgreement = findViewById<TextView>(R.id.agreement)
-        val themeSwitch = findViewById<SwitchMaterial>(R.id.switcher)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.switcher)
 
         toolbar.setNavigationOnClickListener {
             finish()
@@ -63,13 +63,9 @@ class SettingsActivity : AppCompatActivity() {
 
         }
 
-        themeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
+        themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+            (applicationContext as AppThemeMode).switchTheme(isChecked)
         }
-        themeSwitch.isChecked = (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+        themeSwitcher.isChecked = (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
     }
 }
