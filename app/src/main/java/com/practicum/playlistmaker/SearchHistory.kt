@@ -9,6 +9,8 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
     fun getTrackFromHistory(): List<Track> = readTrackListFromSP()
 
+    private val gson = Gson()
+
     fun saveTrack(track: Track) {
         val tracks = readTrackListFromSP().toMutableList()
         val index = theSameTracks(tracks, track)
@@ -27,14 +29,14 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
     private fun writeTrackListToSP(tracks: List<Track>) {
         sharedPreferences.edit()
-            .putString(KEY_HISTORY_TRACK_LIST, Gson().toJson(tracks))
+            .putString(KEY_HISTORY_TRACK_LIST, gson.toJson(tracks))
             .apply()
     }
 
     private fun readTrackListFromSP(): List<Track> {
         val json = sharedPreferences.getString(KEY_HISTORY_TRACK_LIST, null) ?: return emptyList()
             val type: Type = object : TypeToken<List<Track>>() {}.type
-            return Gson().fromJson(json, type) ?: emptyList()
+            return gson.fromJson(json, type) ?: emptyList()
     }
 
     fun clearSearchHistory() {

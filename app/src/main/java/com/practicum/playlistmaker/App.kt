@@ -5,17 +5,17 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 
-class AppThemeMode : Application() {
+class App : Application() {
 
-    var darkTheme = false
+    private var darkTheme = false
     lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate() {
         super.onCreate()
 
-        sharedPreferences = getSharedPreferences("SHARED_PREFERENCE", MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE)
         val darkModeOn = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-        darkTheme = sharedPreferences.getBoolean("DARK_THEME_KEY", darkModeOn)
+        darkTheme = sharedPreferences.getBoolean(DARK_THEME_KEY, darkModeOn)
         switchTheme(darkTheme)
     }
 

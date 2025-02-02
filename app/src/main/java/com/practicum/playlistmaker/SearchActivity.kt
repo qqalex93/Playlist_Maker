@@ -67,7 +67,7 @@ class SearchActivity : AppCompatActivity() {
         errorMessage = findViewById(R.id.tw_error_search_message)
         updateErrorButton = findViewById(R.id.error_search_button)
 
-        searchHistory = SearchHistory((applicationContext as AppThemeMode).sharedPreferences)
+        searchHistory = SearchHistory((applicationContext as App).sharedPreferences)
         val rwHistory = findViewById<RecyclerView>(R.id.search_history_list)
         val wgHistory = findViewById<LinearLayout>(R.id.rw_query_history_list)
         val clearHistoryBtn = findViewById<Button>(R.id.clear_history_btn)

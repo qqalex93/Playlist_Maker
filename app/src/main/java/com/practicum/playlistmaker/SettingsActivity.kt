@@ -64,7 +64,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
-            (applicationContext as AppThemeMode).switchTheme(isChecked)
+            (applicationContext as App).switchTheme(isChecked)
         }
         themeSwitcher.isChecked = (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
     }
