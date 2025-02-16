@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.App.Companion.TRACK_KEY
 import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
 
-const val TRACK_KEY = "track"
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -19,10 +19,13 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val track: Track? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            this.intent.getParcelableExtra(TRACK_KEY, Track::class.java)
-        } else {
-            this.intent.getParcelableExtra(TRACK_KEY)
+        val track: Track? = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+                this.intent.getParcelableExtra(TRACK_KEY, Track::class.java)
+            }
+            else -> {
+                this.intent.getParcelableExtra(TRACK_KEY)
+            }
         }
 
         binding.apToolbar.setNavigationOnClickListener {
