@@ -121,6 +121,16 @@
     <style name="SearchTitle" parent="PlaceholderText"/>
 
     <style name="ClearHistoryBtn" parent="UpdateButtonStyle"/>
+    
+    <style name="AudioPlayerActivityText13">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/ap_text_color_black</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+    
+    <style name="AudioPlayerActivityText14" parent="AudioPlayerActivityText13">
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
 
 
 </resources>

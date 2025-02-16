@@ -2,6 +2,7 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Message
@@ -23,6 +24,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.App.Companion.TRACK_KEY
 import com.practicum.playlistmaker.RetrofitClient.trackApi
 import retrofit2.Call
 import retrofit2.Callback
@@ -131,7 +133,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         historyAdapter = TrackAdapter {
-            addTrackToHistory(it)
+            openPlayer(it)
         }
         historyAdapter.tracks = searchHistory.getTrackFromHistory().toMutableList()
         rwHistory.layoutManager = LinearLayoutManager(
@@ -145,7 +147,7 @@ class SearchActivity : AppCompatActivity() {
             false)
 
         trackAdapter = TrackAdapter {
-            addTrackToHistory(it)
+            openPlayer(it)
         }
         trackAdapter.tracks = tracks
         trackRecyclerView.adapter = trackAdapter
@@ -212,6 +214,13 @@ class SearchActivity : AppCompatActivity() {
                 showErrorMessage(getString(R.string.bad_connection_message), true)
             }
         })
+    }
+
+    private fun openPlayer(track: Track) {
+        addTrackToHistory(track)
+        val intent: Intent = Intent(this, AudioPlayerActivity::class.java)
+        intent.putExtra(TRACK_KEY, track)
+        startActivity(intent)
     }
 
     private fun addTrackToHistory(track: Track) {

@@ -10,4 +10,8 @@
     <color name="search_bar">#E6E8EB</color>
     <color name="delimiter_color">#AEAFB4</color>
     <color name="yellow">#FCD452</color>
+    <color name="ap_text_color_gray">#b3b4b9</color>
+    <color name="ap_text_color_black">@color/black</color>
+    <color name="ap_btn_color">#c5c6c7</color>
+    <color name="black_btn_play">@color/black</color>
 </resources>
