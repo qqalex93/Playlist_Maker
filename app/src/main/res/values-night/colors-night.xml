@@ -8,4 +8,5 @@
     <color name="ap_text_color_black">@color/white</color>
     <color name="black_btn_play">@color/white</color>
     <color name="ap_btn_color">#535459</color>
+    <color name="ap_btn_background_color">#1A1B22</color>
 </resources>

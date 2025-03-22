@@ -41,7 +41,6 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/search_button"
-            android:imeOptions="actionDone"
             style="@style/EditTextBaseStyle"/>
 
         <ImageView
@@ -89,6 +88,14 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/value_44"
+            android:layout_height="@dimen/value_44"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/blue"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rw_track_list"
