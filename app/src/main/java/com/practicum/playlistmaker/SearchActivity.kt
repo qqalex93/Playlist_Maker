@@ -274,6 +274,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
         trackRecyclerView.clearOnScrollListeners()
     }
 
@@ -309,5 +310,6 @@ class SearchActivity : AppCompatActivity() {
         const val IS_RESPONSE_VISIBLE = "IS_RESPONSE_VISIBLE"
         const val CLICK_DEBOUNCE_DELAY = 1000L
         const val SEARCH_DEBOUNCE_DELAY = 2000L
+
     }
 }

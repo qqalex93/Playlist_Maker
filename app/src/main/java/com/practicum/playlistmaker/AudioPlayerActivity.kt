@@ -31,14 +31,13 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private var url: String? = ""
 
+    private val dateFormat by lazy { SimpleDateFormat ("mm:ss", Locale.getDefault()) }
+
     private val updateRunnable = object : Runnable {
         override fun run() {
             if (mediaPlayer.isPlaying) {
-                timerTW.text = SimpleDateFormat(
-                    "mm:ss",
-                    Locale.getDefault()
-                ).format(mediaPlayer.currentPosition)
-                handler.postDelayed(this, 300)
+                timerTW.text = dateFormat.format(mediaPlayer.currentPosition)
+                handler.postDelayed(this, REFRESH_DELAY_MS)
             }
         }
     }
@@ -174,5 +173,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
+        private const val REFRESH_DELAY_MS = 300L
     }
 }
