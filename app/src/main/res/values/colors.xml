@@ -13,5 +13,6 @@
     <color name="ap_text_color_gray">#b3b4b9</color>
     <color name="ap_text_color_black">@color/black</color>
     <color name="ap_btn_color">#c5c6c7</color>
+    <color name="ap_btn_background_color">#FFFFFFFF</color>
     <color name="black_btn_play">@color/black</color>
 </resources>

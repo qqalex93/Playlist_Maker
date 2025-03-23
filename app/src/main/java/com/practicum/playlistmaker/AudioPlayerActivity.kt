@@ -1,23 +1,54 @@
 package com.practicum.playlistmaker
 
+import android.icu.text.SimpleDateFormat
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.App.Companion.TRACK_KEY
 import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
+import kotlinx.coroutines.Runnable
+import java.util.Locale
 
 
 class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
 
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var playTrack: ImageButton
+    private var mediaPlayer = MediaPlayer()
+    private lateinit var timerTW: TextView
+    private var playerState = STATE_DEFAULT
+
+    private var url: String? = ""
+
+    private val dateFormat by lazy { SimpleDateFormat ("mm:ss", Locale.getDefault()) }
+
+    private val updateRunnable = object : Runnable {
+        override fun run() {
+            if (mediaPlayer.isPlaying) {
+                timerTW.text = dateFormat.format(mediaPlayer.currentPosition)
+                handler.postDelayed(this, REFRESH_DELAY_MS)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        playTrack = binding.btnPlayTrack
+        timerTW = binding.trackTimePlayed
 
         val track: Track? = when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
@@ -26,6 +57,10 @@ class AudioPlayerActivity : AppCompatActivity() {
             else -> {
                 this.intent.getParcelableExtra(TRACK_KEY)
             }
+        }
+
+        playTrack.setOnClickListener {
+            playbackControl()
         }
 
         binding.apToolbar.setNavigationOnClickListener {
@@ -43,9 +78,13 @@ class AudioPlayerActivity : AppCompatActivity() {
                 .error(R.drawable.ic_placeholder_cover)
                 .into(binding.trackCover)
 
+            url = track.previewUrl.toString()
+
             binding.trackNameAp.text = track.trackName ?: getString(R.string.nothing_found_message)
-            binding.artistNameAp.text = track.artistName ?: getString(R.string.nothing_found_message)
-            binding.tvRightDuration.text = track.trackTimeFormat() ?: getString(R.string.nothing_found_message)
+            binding.artistNameAp.text =
+                track.artistName ?: getString(R.string.nothing_found_message)
+            binding.tvRightDuration.text =
+                track.trackTimeFormat() ?: getString(R.string.nothing_found_message)
 
             if (track.collectionName != null) {
                 binding.tvRightAlbumName.text = track.collectionName
@@ -58,9 +97,82 @@ class AudioPlayerActivity : AppCompatActivity() {
             binding.tvRightTrackGenre.text = track.primaryGenreName
             binding.tvRightTrackCountry.text = track.country
 
+            preparePlayer()
+
         } else {
+            finish()
+        }
+
+        binding.apToolbar.setOnClickListener {
             finish()
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(updateRunnable)
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(updateRunnable)
+        mediaPlayer.release()
+    }
+
+    private fun preparePlayer() {
+        if (url.isNullOrEmpty()) {
+            Toast.makeText(this, "Invalid track url", Toast.LENGTH_SHORT).show()
+            return
+        }
+        try {
+            mediaPlayer.setDataSource(url)
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                playTrack.isEnabled = true
+                playerState = STATE_PREPARED
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error loading track", Toast.LENGTH_SHORT).show()
+            e.printStackTrace()
+        }
+
+        mediaPlayer.setOnCompletionListener {
+            playTrack.setImageResource(R.drawable.ic_play)
+            timerTW.text = "00:00"
+            playerState = STATE_PREPARED
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        playTrack.setImageResource(R.drawable.ic_pause)
+        handler.post(updateRunnable)
+        playerState = STATE_PLAYING
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playTrack.setImageResource(R.drawable.ic_play)
+        playerState = STATE_PAUSED
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val REFRESH_DELAY_MS = 300L
+    }
 }
