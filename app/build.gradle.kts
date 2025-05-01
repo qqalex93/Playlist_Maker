@@ -49,6 +49,7 @@ dependencies {
 
     implementation(libs.material.v161)
     implementation(libs.glide)
+    implementation(libs.androidx.ui.text.android)
     annotationProcessor(libs.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

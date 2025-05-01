@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_search"
     style="@style/ActivitySearch"
-    tools:context=".SearchActivity">
+    tools:context=".presentation.ui.search.SearchActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/search_toolbar"
@@ -108,15 +108,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iw_error_search_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_102"
-                android:src="@drawable/ic_error_search_result_dm"
-                android:visibility="gone"/>
+                android:src="@drawable/ic_error_search_result_dm"/>
 
             <TextView
                 android:id="@+id/tw_error_search_message"
@@ -125,8 +125,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/nothing_found_message"
                 android:layout_marginTop="@dimen/value_16"
-                android:layout_marginHorizontal="@dimen/value_24"
-                android:visibility="gone"/>
+                android:layout_marginHorizontal="@dimen/value_24"/>
 
             <Button
                 android:id="@+id/error_search_button"

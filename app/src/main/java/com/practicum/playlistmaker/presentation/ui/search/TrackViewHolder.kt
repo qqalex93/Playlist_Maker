@@ -1,15 +1,14 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui.search
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -37,11 +36,6 @@ class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
         trackName.text = model.trackName ?: itemView.context.getString(R.string.nothing_found_message)
         artistName.text = model.artistName ?: itemView.context.getString(R.string.nothing_found_message)
         artistName.requestLayout()
-        val time: String = if (model.trackTimeMillis != null) {
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
-        } else {
-            itemView.context.getString(R.string.nothing_found_message)
-        }
-        trackTime.text = time
+        trackTime.text = model.trackTimeMillis ?: itemView.context.getString(R.string.nothing_found_message)
     }
 }

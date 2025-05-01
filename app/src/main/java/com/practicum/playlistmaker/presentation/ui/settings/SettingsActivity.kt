@@ -1,19 +1,17 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui.settings
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmaker.presentation.ui.App
+import com.practicum.playlistmaker.R
+import androidx.core.net.toUri
 
 class SettingsActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -46,7 +44,7 @@ class SettingsActivity : AppCompatActivity() {
             val messageContent = getString(R.string.message_content)
             val themeMessage = getString(R.string.theme_message)
             val shareIntent = Intent(Intent.ACTION_SENDTO)
-            shareIntent.data = Uri.parse("mailto:")
+            shareIntent.data = "mailto:".toUri()
             shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.recipient_address)))
             shareIntent.putExtra(Intent.EXTRA_TEXT, messageContent)
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, themeMessage)
@@ -56,7 +54,7 @@ class SettingsActivity : AppCompatActivity() {
         userAgreement.setOnClickListener {
             val linkToAgreement = getString(R.string.link_to_user_agreement)
             val shareIntent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse(linkToAgreement)
+                data = linkToAgreement.toUri()
                 addCategory(Intent.CATEGORY_BROWSABLE)
             }
             startActivity(shareIntent)

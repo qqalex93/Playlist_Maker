@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui.audioPlayer
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
@@ -13,32 +13,31 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.App.Companion.TRACK_KEY
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.creator.CreatorAudioPlayer
+import com.practicum.playlistmaker.presentation.ui.App.Companion.TRACK_KEY
+import com.practicum.playlistmaker.data.dto.TrackDto
 import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.practicum.playlistmaker.domain.models.Track
 import kotlinx.coroutines.Runnable
 import java.util.Locale
 
 
 class AudioPlayerActivity : AppCompatActivity() {
 
+    private val audioPlayerInteractor = CreatorAudioPlayer.provideAudioPlayerInteractor()
+
     private lateinit var binding: ActivityAudioPlayerBinding
 
     private val handler = Handler(Looper.getMainLooper())
+
     private lateinit var playTrack: ImageButton
-    private var mediaPlayer = MediaPlayer()
     private lateinit var timerTW: TextView
-    private var playerState = STATE_DEFAULT
-
-    private var url: String? = ""
-
-    private val dateFormat by lazy { SimpleDateFormat ("mm:ss", Locale.getDefault()) }
 
     private val updateRunnable = object : Runnable {
         override fun run() {
-            if (mediaPlayer.isPlaying) {
-                timerTW.text = dateFormat.format(mediaPlayer.currentPosition)
+                timerTW.text = audioPlayerInteractor.getCurrentPosition()
                 handler.postDelayed(this, REFRESH_DELAY_MS)
-            }
         }
     }
 
@@ -48,19 +47,23 @@ class AudioPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         playTrack = binding.btnPlayTrack
-        timerTW = binding.trackTimePlayed
+        playTrack.isEnabled = false
 
         val track: Track? = when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
-                this.intent.getParcelableExtra(TRACK_KEY, Track::class.java)
+                this.intent.getSerializableExtra(TRACK_KEY, Track::class.java)
             }
             else -> {
-                this.intent.getParcelableExtra(TRACK_KEY)
+                this.intent.getSerializableExtra(TRACK_KEY) as Track
             }
         }
 
         playTrack.setOnClickListener {
-            playbackControl()
+            audioPlayerInteractor.playerControl(
+                { startPlayerCallback() },
+                { pausePlayerCallback() },
+                { preparePlayerCallback() }
+            )
         }
 
         binding.apToolbar.setNavigationOnClickListener {
@@ -71,20 +74,26 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         if (track != null) {
             Glide.with(this)
-                .load(track.getCoverAtWork() ?: "")
+                .load(track.artworkUrl512 ?: "")
                 .transform(RoundedCorners(cornerRadius))
                 .centerInside()
                 .placeholder(R.drawable.ic_placeholder_cover)
                 .error(R.drawable.ic_placeholder_cover)
                 .into(binding.trackCover)
 
-            url = track.previewUrl.toString()
+            if (track.previewUrl != null) {
+                audioPlayerInteractor.playerPrepare(
+                    track.previewUrl,
+                    { preparePlayerCallback() },
+                    { completionPlayerCallback() }
+                )
+            }
 
             binding.trackNameAp.text = track.trackName ?: getString(R.string.nothing_found_message)
             binding.artistNameAp.text =
                 track.artistName ?: getString(R.string.nothing_found_message)
             binding.tvRightDuration.text =
-                track.trackTimeFormat() ?: getString(R.string.nothing_found_message)
+                track.trackTimeMillis ?: getString(R.string.nothing_found_message)
 
             if (track.collectionName != null) {
                 binding.tvRightAlbumName.text = track.collectionName
@@ -92,12 +101,11 @@ class AudioPlayerActivity : AppCompatActivity() {
                 binding.tvRightAlbumName.isGone = true
                 binding.tvLeftAlbumName.isGone = true
             }
+            timerTW = findViewById(R.id.track_time_played)
 
-            binding.tvRightTrackYear.text = track.getTrackYear()
+            binding.tvRightTrackYear.text = track.releaseDate
             binding.tvRightTrackGenre.text = track.primaryGenreName
             binding.tvRightTrackCountry.text = track.country
-
-            preparePlayer()
 
         } else {
             finish()
@@ -110,69 +118,43 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        handler.removeCallbacks(updateRunnable)
-        pausePlayer()
+        audioPlayerInteractor.playerPause(
+            { pausePlayerCallback() },
+            { errorPlayerCallback() }
+        )
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        audioPlayerInteractor.playerRelease()
+    }
+
+    private fun preparePlayerCallback() {
+        playTrack.isEnabled = true
+    }
+
+    private fun completionPlayerCallback() {
         handler.removeCallbacks(updateRunnable)
-        mediaPlayer.release()
-    }
-
-    private fun preparePlayer() {
-        if (url.isNullOrEmpty()) {
-            Toast.makeText(this, "Invalid track url", Toast.LENGTH_SHORT).show()
-            return
-        }
-        try {
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener {
-                playTrack.isEnabled = true
-                playerState = STATE_PREPARED
-            }
-        } catch (e: Exception) {
-            Toast.makeText(this, "Error loading track", Toast.LENGTH_SHORT).show()
-            e.printStackTrace()
-        }
-
-        mediaPlayer.setOnCompletionListener {
-            playTrack.setImageResource(R.drawable.ic_play)
-            timerTW.text = "00:00"
-            playerState = STATE_PREPARED
-        }
-    }
-
-    private fun startPlayer() {
-        mediaPlayer.start()
-        playTrack.setImageResource(R.drawable.ic_pause)
-        handler.post(updateRunnable)
-        playerState = STATE_PLAYING
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
         playTrack.setImageResource(R.drawable.ic_play)
-        playerState = STATE_PAUSED
+        timerTW.text = "00:00"
     }
 
-    private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
+    private fun errorPlayerCallback() {
+        Toast.makeText(this, "Error loading track", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun startPlayerCallback() {
+        handler.post(updateRunnable)
+        playTrack.setImageResource(R.drawable.ic_pause)
+    }
+
+    private fun pausePlayerCallback() {
+        handler.removeCallbacks(updateRunnable)
+        playTrack.setImageResource(R.drawable.ic_play)
     }
 
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
+
         private const val REFRESH_DELAY_MS = 300L
     }
 }

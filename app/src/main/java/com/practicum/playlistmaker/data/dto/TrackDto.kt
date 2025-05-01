@@ -1,12 +1,9 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.data.dto
 
-import android.os.Parcelable
 import java.text.SimpleDateFormat
 import java.util.Locale
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class Track(
+data class TrackDto(
     val trackId: Int?,
     val trackName: String?,
     val artistName: String?,
@@ -17,7 +14,7 @@ data class Track(
     val primaryGenreName: String?,
     val country: String?,
     val previewUrl: String?
-) : Parcelable {
+) {
     fun getCoverAtWork() = artworkUrl100?.replaceAfterLast("/", "512x512bb.jpg")
 
     fun trackTimeFormat(): String? = if (trackTimeMillis != null) {
