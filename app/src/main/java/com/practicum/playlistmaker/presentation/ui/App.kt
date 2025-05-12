@@ -3,9 +3,7 @@ package com.practicum.playlistmaker.presentation.ui
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import com.practicum.playlistmaker.creator.CreatorExternalActions
-import com.practicum.playlistmaker.creator.CreatorHistory
-import com.practicum.playlistmaker.creator.CreatorSettings
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.api.interactor.SettingsInteractor
 
 class App : Application() {
@@ -15,10 +13,10 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        CreatorSettings.initApplication(this)
-        CreatorExternalActions.initApplication(this)
-        CreatorHistory.initApplication(this)
-        settingsInteractor = CreatorSettings.provideSettingsInteractor()
+        Creator.initApplication(this)
+        Creator.initApplication(this)
+        Creator.initApplication(this)
+        settingsInteractor = Creator.provideSettingsInteractor()
         setSavedTheme()
     }
 

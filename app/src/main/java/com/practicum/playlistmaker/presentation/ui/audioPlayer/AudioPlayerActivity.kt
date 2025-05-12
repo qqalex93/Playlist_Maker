@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.presentation.ui.audioPlayer
 
-import android.icu.text.SimpleDateFormat
-import android.media.MediaPlayer
+
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -14,18 +13,17 @@ import androidx.core.view.isGone
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.CreatorAudioPlayer
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.presentation.ui.App.Companion.TRACK_KEY
-import com.practicum.playlistmaker.data.dto.TrackDto
 import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.practicum.playlistmaker.domain.models.Track
 import kotlinx.coroutines.Runnable
-import java.util.Locale
+
 
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    private val audioPlayerInteractor = CreatorAudioPlayer.provideAudioPlayerInteractor()
+    private val audioPlayerInteractor = Creator.provideAudioPlayerInteractor()
 
     private lateinit var binding: ActivityAudioPlayerBinding
 

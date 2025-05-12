@@ -23,11 +23,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.presentation.ui.App.Companion.TRACK_KEY
-import com.practicum.playlistmaker.creator.CreatorHistory
-import com.practicum.playlistmaker.creator.CreatorSearch
 import com.practicum.playlistmaker.domain.models.Track
-import com.practicum.playlistmaker.domain.api.interactor.TrackHistoryInteractor
 import com.practicum.playlistmaker.domain.api.interactor.TrackSearchInteractor
 import com.practicum.playlistmaker.presentation.ui.audioPlayer.AudioPlayerActivity
 
@@ -54,8 +52,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
 
     private val trackSearchInteractor: TrackSearchInteractor =
-        CreatorSearch.provideTrackSearchInteractor()
-    private val trackHistoryInteractor = CreatorHistory.provideTrackInteractorHistory()
+        Creator.provideTrackSearchInteractor()
+    private val trackHistoryInteractor = Creator.provideTrackInteractorHistory()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

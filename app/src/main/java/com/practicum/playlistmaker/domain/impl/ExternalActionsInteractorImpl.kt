@@ -9,8 +9,8 @@ class ExternalActionsInteractorImpl(private val actions: ExternalActions) : Exte
         actions.shareApp(link)
     }
 
-    override fun writeToSupport(targetMail: String, subjectMail: String, messageMail: String) {
-        actions.writeToSupport(targetMail, subjectMail, messageMail)
+    override fun writeToSupport(targetMail: String, themeMessage: String, messageContent: String) {
+        actions.writeToSupport(targetMail, themeMessage, messageContent)
     }
 
     override fun userAgreement(url: String) {

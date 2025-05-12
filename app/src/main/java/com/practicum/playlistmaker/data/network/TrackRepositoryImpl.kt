@@ -13,6 +13,7 @@ import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.presentation.ui.App.Companion.SUCCESS_CODE
 import java.lang.reflect.Type
 import androidx.core.content.edit
+import com.practicum.playlistmaker.data.NetworkConst
 
 class TrackRepositoryImpl(
     private val networkClient: NetworkClient? = null,
@@ -20,7 +21,7 @@ class TrackRepositoryImpl(
 ) : TrackRepository {
 
     private val sharedPreferences: SharedPreferences? = application?.getSharedPreferences(
-        SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        NetworkConst.SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
     override fun trackSearch(text: String): List<Track>? {
         if (networkClient != null) {
@@ -49,7 +50,7 @@ class TrackRepositoryImpl(
 
     override fun getHistory(): List<Track> {
         if (sharedPreferences != null) {
-            val json = sharedPreferences.getString(KEY_FOR_HISTORY_TRACK_LIST, null)
+            val json = sharedPreferences.getString(NetworkConst.KEY_FOR_HISTORY_TRACK_LIST, null)
             return if (json != null) {
                 val type: Type = object : TypeToken<List<Track>>() {}.type
                 Gson().fromJson(json, type) ?: listOf()
@@ -63,14 +64,9 @@ class TrackRepositoryImpl(
         if (sharedPreferences != null) {
             val json: String = Gson().toJson(tracks)
             sharedPreferences.edit() {
-                putString(KEY_FOR_HISTORY_TRACK_LIST, json)
+                putString(NetworkConst.KEY_FOR_HISTORY_TRACK_LIST, json)
             }
         }
-    }
-
-    companion object {
-        private const val KEY_FOR_HISTORY_TRACK_LIST = "history_track_list"
-        private const val SHARED_PREFERENCES = "shared_preferences_history"
     }
 
 }
