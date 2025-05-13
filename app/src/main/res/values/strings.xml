@@ -16,10 +16,12 @@
     <string name="link_to_user_agreement">https://yandex.ru/legal/practicum_offer/</string>
     <string name="nothing_found_message">Ничего не нашлось</string>
     <string name="bad_connection_message">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="something_wrong_message">Что-то пошло не так</string>
     <string name="update_button">Обновить</string>
     <string name="base_url_itunes">https://itunes.apple.com</string>
     <string name="clear_history_btn">Очистить историю</string>
     <string name="search_title">Вы искали</string>
+    <string name="current_track_time_placeholder">00:00</string>
     <string name="track_duration">Длительность</string>
     <string name="album_name">Альбом</string>
     <string name="track_year">Год</string>
