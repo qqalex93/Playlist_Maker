@@ -18,7 +18,7 @@ import java.util.Locale
 class PlayerViewModel(
     private val trackId: Int,
     private val playerInteractor: AudioPlayerInteractor,
-    historyInteractor: TrackHistoryInteractor
+    private val historyInteractor: TrackHistoryInteractor
 ) : ViewModel() {
     private val playerStateLiveData = MutableLiveData<PlayerState>()
 
@@ -47,16 +47,20 @@ class PlayerViewModel(
     private val getCurrentPosition = object : Runnable {
         override fun run() {
             playerCurrentPosition = progressMap(playerInteractor.getCurrentPosition())
-            playerStateLiveData.postValue(
-                PlayerState(
-                    isError = false,
-                    trackInfo = trackInfo,
-                    trackPlaybackState = PlaybackState.PLAYING,
-                    currentPosition = playerCurrentPosition
-                )
-            )
+            updatePlayerState()
             handler.postDelayed(this, TRACK_TIME_DELAY)
         }
+    }
+
+    private fun updatePlayerState() {
+        playerStateLiveData.postValue(
+            PlayerState(
+                isError = false,
+                trackInfo = trackInfo,
+                trackPlaybackState = PlaybackState.PLAYING,
+                currentPosition = playerCurrentPosition
+            )
+        )
     }
 
     fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
