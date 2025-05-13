@@ -1,51 +1,43 @@
 package com.practicum.playlistmaker.player.ui
 
 
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.View
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.app.App.Companion.TRACK_KEY
 import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.practicum.playlistmaker.player.presentation.model.PlaybackState
 import com.practicum.playlistmaker.player.presentation.model.PlayerTrackInfo
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
-import com.practicum.playlistmaker.search.domain.models.Track
-import kotlinx.coroutines.Runnable
+
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 
 
 class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
 
-    private lateinit var viewModel: PlayerViewModel
+    private var trackId: Int = -1
+
+    private val viewModel: PlayerViewModel by lazy {
+        getViewModel { parametersOf(trackId) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val trackId: Int = this.intent.getIntExtra(TRACK_KEY, -1)
+        trackId = this.intent.getIntExtra(TRACK_KEY, -1)
 
         binding.apToolbar.setNavigationOnClickListener {
             finish()
         }
-
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(trackId)
-        )[PlayerViewModel::class.java]
 
         viewModel.getPlayerStateLiveData().observe(this) { playerState ->
             if (playerState.isError) showPlayerError(

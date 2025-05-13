@@ -5,10 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.history.domain.api.interactor.TrackHistoryInteractor
 import com.practicum.playlistmaker.player.domain.api.interactor.AudioPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.mapper.PlayerPresenterTrackMapper
@@ -160,16 +156,6 @@ class PlayerViewModel(
     }
 
     companion object {
-        fun getViewModelFactory(trackId: Int): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(
-                    trackId,
-                    Creator.provideAudioPlayerInteractor(),
-                    Creator.provideTrackInteractorHistory()
-                )
-            }
-        }
-
         const val TRACK_TIME_VALUE = "mm:ss"
         const val TRACK_TIME_DELAY = 300L
         private const val DEFAULT_CURRENT_POSITION = "00:00"
