@@ -3,6 +3,8 @@ agp = "8.10.0"
 compiler = "4.16.0"
 constraintlayoutVersion = "2.2.1"
 coreKtxVersion = "1.9.0"
+fragmentKtx = "1.5.6"
+googleMaterial = "1.8.0"
 gson = "2.12.1"
 koinAndroid = "3.3.0"
 kotlin = "2.0.21"
@@ -15,6 +17,7 @@ material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
 materialVersion = "1.12.0"
+navigationFragmentKtx = "2.9.0"
 retrofit = "2.11.0"
 uiTextAndroid = "1.8.0"
 viewpager2 = "1.1.0"
@@ -24,6 +27,9 @@ androidx-constraintlayout-v200 = { module = "androidx.constraintlayout:constrain
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.16.0" }
 androidx-core-ktx-v190 = { module = "androidx.core:core-ktx", version = "1.16.0" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version = "1.8.6" }
+androidx-fragment-ktx-v156 = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
@@ -38,10 +44,13 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 material-v161 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+material-v180 = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-ui-text-android = { group = "androidx.compose.ui", name = "ui-text-android", version = "1.8.1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+safe-args-kotlin = { id = "androidx.navigation.safeargs.kotlin", version = "2.9.0" }
+
 

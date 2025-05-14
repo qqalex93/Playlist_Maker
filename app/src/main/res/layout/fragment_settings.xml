@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_settings"
-    style="@style/ActivitySettings">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_screen"
+    style="@style/ActivitySettings"
+    android:orientation="vertical"
+    tools:context="">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/settings_toolbar"
-        style="@style/Toolbar"
-        app:navigationIcon="@drawable/ic_back_16">
+        style="@style/Toolbar">
 
         <TextView
             style="@style/ToolbarTitle"

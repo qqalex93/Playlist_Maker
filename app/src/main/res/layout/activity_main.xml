@@ -1,46 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_activity"
-    style="@style/ActivityMain">
+    style="@style/ActivityMain"
+    tools:context=".main.ui.activity.MainActivity">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/Toolbar"
-        android:layout_gravity="start"
-        style="@style/Toolbar"
-        android:layout_marginBottom="@dimen/value_24">
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_main_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/navigation_graph"
+        app:defaultNavHost="true"/>
 
-        <TextView
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            style="@style/ToolbarTitle"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu"
+        style="@style/BottomNavigationTextStyle"/>
 
-    </com.google.android.material.appbar.MaterialToolbar>
-
-    <Button
-        android:id="@+id/search_button"
-        android:text="@string/search_button"
-        app:icon="@drawable/ic_search_19"
-        style="@style/SettingButton"
-        android:layout_marginHorizontal="@dimen/value_16"
-        android:layout_marginBottom="@dimen/value_16"/>
-
-    <Button
-        android:id="@+id/media_button"
-        android:text="@string/media_button"
-        app:icon="@drawable/ic_media"
-        style="@style/SettingButton"
-        android:layout_marginHorizontal="@dimen/value_16"
-        android:layout_marginBottom="@dimen/value_16"/>
-
-    <Button
-        android:id="@+id/settings_button"
-        android:text="@string/settings_button"
-        app:icon="@drawable/ic_settings_24"
-        style="@style/SettingButton"
-        android:layout_marginHorizontal="@dimen/value_16"
-        android:layout_marginBottom="28dp"/>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
     

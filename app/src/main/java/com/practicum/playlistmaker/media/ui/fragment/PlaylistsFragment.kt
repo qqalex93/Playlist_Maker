@@ -37,7 +37,7 @@ class PlaylistsFragment: BindingFragment<FragmentPlaylistBinding>() {
 
         if (state is PlaylistScreenState.Empty) {
             binding.ivErrorImage.setImageResource(emptyImageId)
-            binding.tvErrorMessage.text = getString(R.string.empty_playlist_message)
+            binding.tvErrorMessage.text = requireActivity().getString(R.string.empty_playlist_message)
         }
     }
 

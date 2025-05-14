@@ -1,54 +1,47 @@
-package com.practicum.playlistmaker.search.ui.activity
+package com.practicum.playlistmaker.search.ui.fragment
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.search.presentation.model.SearchTrackInfo
-import com.practicum.playlistmaker.player.ui.AudioPlayerActivity
 import com.practicum.playlistmaker.search.presentation.model.ErrorTypePresenter
 import com.practicum.playlistmaker.search.presentation.model.SearchScreenState
 import com.practicum.playlistmaker.search.presentation.view_model.SearchViewModel
 import com.practicum.playlistmaker.search.ui.adapter.TrackAdapter
 import com.practicum.playlistmaker.search.ui.model.ErrorInfo
+import com.practicum.playlistmaker.support.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivitySearchBinding
+class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private val viewModel: SearchViewModel by viewModel()
 
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
 
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSearchBinding {
+        return FragmentSearchBinding.inflate(inflater, container, false)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_search)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initHistoryAdapter()
-
-        binding.searchToolbar.setNavigationOnClickListener {
-            finish()
-        }
 
         binding.searchLine.setOnFocusChangeListener { _, hasFocus ->
             viewModel.onSearchLineFocusChanged(hasFocus)
@@ -70,7 +63,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.rwTrackList.layoutManager = LinearLayoutManager(
-            this, LinearLayoutManager.VERTICAL,
+            requireContext(), LinearLayoutManager.VERTICAL,
             false
         )
 
@@ -124,7 +117,7 @@ class SearchActivity : AppCompatActivity() {
     private fun initHistoryAdapter() {
         historyAdapter = TrackAdapter { onTrackClicked(it.trackId) }
         binding.searchHistoryList.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.searchHistoryList.adapter = historyAdapter
     }
 
@@ -194,7 +187,7 @@ class SearchActivity : AppCompatActivity() {
         when (errorType) {
             is ErrorTypePresenter.EmptyResult -> {
                 return ErrorInfo(
-                    getString(R.string.nothing_found_message),
+                    requireActivity().getString(R.string.nothing_found_message),
                     getErrorImageIdAccordingTheme(
                         R.drawable.ic_error_search_result_dm,
                         R.drawable.ic_error_search_result_nm
@@ -205,7 +198,7 @@ class SearchActivity : AppCompatActivity() {
 
             is ErrorTypePresenter.NoConnection -> {
                 return ErrorInfo(
-                    getString(R.string.bad_connection_message),
+                    requireActivity().getString(R.string.bad_connection_message),
                     getErrorImageIdAccordingTheme(
                         R.drawable.ic_error_search_result_dm,
                         R.drawable.ic_error_search_result_nm
@@ -216,7 +209,7 @@ class SearchActivity : AppCompatActivity() {
 
             is ErrorTypePresenter.BadRequest, is ErrorTypePresenter.ErrorServer -> {
                 return ErrorInfo(
-                    getString(R.string.something_wrong_message),
+                    requireActivity().getString(R.string.something_wrong_message),
                     getErrorImageIdAccordingTheme(
                         R.drawable.ic_error_search_result_dm,
                         R.drawable.ic_error_search_result_nm
@@ -228,7 +221,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun getErrorImageIdAccordingTheme(imageIdLightMode: Int, imageIdDarkMode: Int): Int {
-        return when (getResources().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+        return when (requireActivity().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> imageIdDarkMode
 
             Configuration.UI_MODE_NIGHT_NO -> imageIdLightMode
@@ -243,25 +236,26 @@ class SearchActivity : AppCompatActivity() {
 
     private fun openPlayer(trackId: Int) {
         clearFocusEditText()
-        val intent = Intent(this, AudioPlayerActivity::class.java)
-        intent.putExtra(TRACK_KEY, trackId)
-        startActivity(intent)
+        viewModel.saveContentStateBeforeOpenPlayer()
+        val action = SearchFragmentDirections.actionSearchFragmentToAudioPlayerActivity(trackId)
+        findNavController().navigate(action)
     }
 
     private fun clearFocusEditText() {
-        val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        inputMethodManager?.hideSoftInputFromWindow(binding.searchLine.windowToken, 0)
-        binding.searchLine.clearFocus()
+        if (binding.searchLine.hasFocus()) {
+            val inputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(binding.searchLine.windowToken, 0)
+            binding.searchLine.clearFocus()
+        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         binding.rwTrackList.clearOnScrollListeners()
+        super.onDestroyView()
     }
 
     private companion object {
         const val STRING_DEF_VALUE = ""
-        const val TRACK_KEY = "track"
     }
 }

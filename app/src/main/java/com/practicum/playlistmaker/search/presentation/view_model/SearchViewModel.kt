@@ -29,7 +29,8 @@ class SearchViewModel(
 
     private var latestSearchRequest: String = STRING_DEF_VALUE
 
-    private val historyTrackList: MutableList<Track> = trackHistoryInteractor.getHistory().toMutableList()
+    private val historyTrackList: MutableList<Track> =
+        trackHistoryInteractor.getHistory().toMutableList()
 
     private val responseTrackList: MutableList<Track> = mutableListOf()
 
@@ -101,9 +102,11 @@ class SearchViewModel(
                     SearchScreenState.Content(setContent(foundTracks))
                 )
             } else {
+                responseTrackList.clear()
                 renderState(SearchScreenState.Error(ErrorTypePresenter.EmptyResult))
             }
         } else {
+            responseTrackList.clear()
             renderState(SearchScreenState.Error(SearchPresenterErrorTypeMapper.map(errorType)))
         }
     }
@@ -168,12 +171,19 @@ class SearchViewModel(
 
     fun onSearchLineFocusChanged(isSearchLineInFocus: Boolean) {
         isDisplayHistoryAllowed = isSearchLineInFocus
-        if (isSearchLineInFocus && latestSearchRequest.isEmpty() && historyTrackList.isNotEmpty())
+        if (isSearchLineInFocus && latestSearchRequest.isEmpty() && historyTrackList.isNotEmpty()) {
             screenStateLiveData.value = SearchScreenState.History(getTracksInfo(historyTrackList))
-        else if (!isSearchLineInFocus && latestSearchRequest.isEmpty())
+        } else if (!isSearchLineInFocus && latestSearchRequest.isEmpty()) {
             screenStateLiveData.value = SearchScreenState.Default
+        }
     }
 
+    fun saveContentStateBeforeOpenPlayer() {
+        if (latestSearchRequest.isNotEmpty() && responseTrackList.isNotEmpty()) {
+            screenStateLiveData.value =
+                SearchScreenState.Content(responseTrackList.map { SearchPresenterTrackMapper.map(it) })
+        }
+    }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L

@@ -37,7 +37,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
 
         if (state is FavoriteScreenState.Empty) {
             binding.ivErrorImage.setImageResource(emptyImageId)
-            binding.tvErrorMessage.text = getString(R.string.empty_favorite_message)
+            binding.tvErrorMessage.text = requireActivity().getString(R.string.empty_favorite_message)
         }
     }
 
