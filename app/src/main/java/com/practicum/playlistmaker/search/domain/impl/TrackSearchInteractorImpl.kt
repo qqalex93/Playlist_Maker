@@ -5,13 +5,13 @@ import com.practicum.playlistmaker.search.domain.api.repository.TrackRepository
 import com.practicum.playlistmaker.search.domain.models.Resource
 import java.util.concurrent.Executors
 
-class TrackSearchInteractorImpl(private val repository: TrackRepository) : TrackSearchInteractor {
+class TrackSearchInteractorImpl(private val trackRepository: TrackRepository) : TrackSearchInteractor {
 
     private val executor = Executors.newCachedThreadPool()
 
     override fun trackSearch(text: String, consumer: TrackSearchInteractor.TrackConsumer) {
         executor.execute {
-            when (val resource = repository.trackSearch(text)) {
+            when (val resource = trackRepository.trackSearch(text)) {
                 is Resource.Success -> {
                     consumer.consume(resource.data, null)
                 }

@@ -55,6 +55,6 @@ class AudioPlayerRepositoryImpl(private val player: MediaPlayer) : AudioPlayerRe
     }
 
     override fun playerRelease() {
-        player.release()
+        player.reset()
     }
 }

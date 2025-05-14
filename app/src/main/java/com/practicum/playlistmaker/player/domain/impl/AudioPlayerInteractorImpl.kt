@@ -7,14 +7,14 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class AudioPlayerInteractorImpl(private val repository: AudioPlayerRepository) :
+class AudioPlayerInteractorImpl(private val audioPlayerRepository: AudioPlayerRepository) :
     AudioPlayerInteractor {
     override fun playerPrepare(
         resourceUrl: String,
         preparedCallback: () -> Unit,
         completionCallback: () -> Unit
     ) {
-        repository.playerPrepare(resourceUrl, preparedCallback, completionCallback)
+        audioPlayerRepository.playerPrepare(resourceUrl, preparedCallback, completionCallback)
     }
 
     override fun playerControl(
@@ -22,15 +22,15 @@ class AudioPlayerInteractorImpl(private val repository: AudioPlayerRepository) :
         pauseCallback: () -> Unit,
         errorCallback: () -> Unit
     ) {
-        val playerState = repository.getPlayerState()
+        val playerState = audioPlayerRepository.getPlayerState()
         when (playerState) {
             PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
-                repository.playerStart()
+                audioPlayerRepository.playerStart()
                 startCallback()
             }
 
             PlayerState.STATE_PLAYING -> {
-                repository.playerPause()
+                audioPlayerRepository.playerPause()
                 pauseCallback()
             }
 
@@ -39,26 +39,26 @@ class AudioPlayerInteractorImpl(private val repository: AudioPlayerRepository) :
     }
 
     override fun playerStart(startCallback: () -> Unit) {
-        val playerState = repository.getPlayerState()
+        val playerState = audioPlayerRepository.getPlayerState()
         if (playerState != PlayerState.STATE_DEFAULT) {
-            repository.playerStart()
+            audioPlayerRepository.playerStart()
             startCallback()
         }
     }
 
     override fun playerPause(pauseCallback: () -> Unit) {
-        val playerState = repository.getPlayerState()
+        val playerState = audioPlayerRepository.getPlayerState()
         if (playerState != PlayerState.STATE_DEFAULT)
-            repository.playerPause()
+            audioPlayerRepository.playerPause()
             pauseCallback()
     }
 
     override fun playerRelease() {
-        repository.playerRelease()
+        audioPlayerRepository.playerRelease()
     }
 
     override fun getCurrentPosition(): Int {
-        return repository.getCurrentPosition()
+        return audioPlayerRepository.getCurrentPosition()
     }
 
 }

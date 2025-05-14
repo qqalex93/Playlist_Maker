@@ -16,56 +16,42 @@ import com.practicum.playlistmaker.search.domain.models.ErrorType
 import com.practicum.playlistmaker.search.domain.models.Resource
 
 class TrackRepositoryImpl(
-    private val networkClient: NetworkClient? = null,
-    private val sharedPreferences: SharedPreferences? = null
+    private val networkClient: NetworkClient,
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
 ) : TrackRepository {
 
     override fun trackSearch(text: String): Resource<List<Track>> {
-        if (networkClient != null) {
-            val response = networkClient.doRequest(TrackSearchRequest(text))
+        val response = networkClient.doRequest(TrackSearchRequest(text))
 
-            when (response.resultCode) {
-                NetworkResponseCode.SUCCESS -> {
-                    val result = (response as TrackSearchResponse).results
-                    return if (result.isEmpty()) Resource.Empty()
-                    else Resource.Success(result.map { SearchRepositoryTrackMapper.map(it) })
-                }
-
-                NetworkResponseCode.NO_CONNECTION -> {
-                    return Resource.Error(errorType = ErrorType.NoConnection)
-                }
-
-                NetworkResponseCode.BAD_REQUEST -> {
-                    return Resource.Error(errorType = ErrorType.BadRequest())
-                }
-
-                NetworkResponseCode.ERROR_SERVER -> {
-                    return Resource.Error(errorType = ErrorType.ErrorServer())
-                }
+        return when (response.resultCode) {
+            NetworkResponseCode.SUCCESS -> {
+                val result = (response as TrackSearchResponse).results
+                if (result.isEmpty()) Resource.Empty()
+                else Resource.Success(result.map { SearchRepositoryTrackMapper.map(it) })
             }
+
+            NetworkResponseCode.NO_CONNECTION -> Resource.Error(errorType = ErrorType.NoConnection)
+            NetworkResponseCode.BAD_REQUEST -> Resource.Error(errorType = ErrorType.BadRequest())
+            NetworkResponseCode.ERROR_SERVER -> Resource.Error(errorType = ErrorType.ErrorServer())
         }
-        return Resource.Error(ErrorType.BadRequest())
     }
 
     override fun getHistory(): List<Track> {
-        if (sharedPreferences != null) {
-            val json =
-                sharedPreferences.getString(KEY_HISTORY_TRACK_LIST, null)
-            return if (json != null) {
-                val type: Type = object : TypeToken<List<Track>>() {}.type
-                Gson().fromJson(json, type) ?: listOf()
-            } else {
-                listOf()
-            }
-        } else return listOf()
+        val json =
+            sharedPreferences.getString(KEY_HISTORY_TRACK_LIST, null)
+        return if (json != null) {
+            val type: Type = object : TypeToken<List<Track>>() {}.type
+            gson.fromJson(json, type) ?: listOf()
+        } else {
+            listOf()
+        }
     }
 
     override fun updateHistory(tracks: List<Track>) {
-        if (sharedPreferences != null) {
-            val json: String = Gson().toJson(tracks)
-            sharedPreferences.edit() {
-                putString(KEY_HISTORY_TRACK_LIST, json)
-            }
+        val json: String = gson.toJson(tracks)
+        sharedPreferences.edit() {
+            putString(KEY_HISTORY_TRACK_LIST, json)
         }
     }
     companion object {
