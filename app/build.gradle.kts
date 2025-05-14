@@ -63,4 +63,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.constraintlayout.v200)
     implementation(libs.koin.android)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.viewpager2)
 }

@@ -23,6 +23,16 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="FragmentScreenStyle">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="TabLayoutStyle">
+        <item name="android:background">@color/white</item>
+        <item name="tabIndicatorColor">@color/black</item>
+        <item name="tabTextColor">@color/black</item>
+    </style>
+
     <style name="SettingButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
@@ -118,6 +128,10 @@
         <item name="fontFamily">@font/ys_display_medium</item>
     </style>
 
+    <style name="CreateButtonStyle" parent="UpdateButtonStyle">
+        <item name="android:backgroundTint">@color/black</item>
+    </style>
+
     <style name="SearchTitle" parent="PlaceholderText"/>
 
     <style name="ClearHistoryBtn" parent="UpdateButtonStyle"/>
@@ -130,6 +144,11 @@
     
     <style name="AudioPlayerActivityText14" parent="AudioPlayerActivityText13">
         <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="FragmentTextStyle" parent="AudioPlayerActivityText13">
+        <item name="android:textSize">@dimen/text_size_19</item>
+        <item name="android:gravity">center</item>
     </style>
 
 

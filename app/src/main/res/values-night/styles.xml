@@ -23,6 +23,16 @@
         <item name="android:background">@color/black</item>
     </style>
 
+    <style name="FragmentScreenStyle">
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="TabLayoutStyle">
+        <item name="android:background">@color/black</item>
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabTextColor">@color/white</item>
+    </style>
+
     <style name="SettingButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
@@ -50,6 +60,7 @@
     <style name="Toolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="background">@color/black</item>
         <item name="navigationIconTint">@color/white</item>
     </style>
 
@@ -116,6 +127,10 @@
         <item name="backgroundTint">@color/white</item>
         <item name="textAllCaps">false</item>
         <item name="fontFamily">@font/ys_display_medium</item>
+    </style>
+
+    <style name="CreateButtonStyle" parent="UpdateButtonStyle">
+        <item name="android:backgroundTint">@color/white</item>
     </style>
 
     <style name="SearchTitle" parent="PlaceholderText"/>

@@ -10,6 +10,7 @@
     <dimen name="text_size_19">19sp</dimen>
     <dimen name="text_size_22">22sp</dimen>
     <dimen name="value_1">1dp</dimen>
+    <dimen name="value_2">2dp</dimen>
     <dimen name="value_4">4dp</dimen>
     <dimen name="value_8">8dp</dimen>
     <dimen name="value_9">9dp</dimen>
@@ -29,5 +30,6 @@
     <dimen name="value_54">54dp</dimen>
     <dimen name="value_61">61dp</dimen>
     <dimen name="value_102">102dp</dimen>
+    <dimen name="value_106">106dp</dimen>
 
 </resources>
