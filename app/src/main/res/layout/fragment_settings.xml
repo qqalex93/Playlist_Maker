@@ -5,7 +5,7 @@
     android:id="@+id/settings_screen"
     style="@style/ActivitySettings"
     android:orientation="vertical"
-    tools:context="">
+    tools:context="com.practicum.playlistmaker.settings.ui.fragment.SettingsFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/settings_toolbar"

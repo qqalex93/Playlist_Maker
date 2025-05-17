@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/group_empty"
+        android:id="@+id/group_pl_widget_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_tags="iv_error_image, tv_error_message" />

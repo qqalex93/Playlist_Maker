@@ -12,27 +12,32 @@ import com.practicum.playlistmaker.databinding.FragmentMediaBinding
 
 class MediaFragment : BindingFragment<FragmentMediaBinding>() {
 
+    private lateinit var tabLayoutMediator: TabLayoutMediator
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = FragmentMediaBinding.inflate(inflater, container, false)
+    ): FragmentMediaBinding {
+        return FragmentMediaBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.mediaViewPager.adapter = MediaViewPagerAdapter(childFragmentManager, lifecycle)
 
-        TabLayoutMediator(binding.mediaTab, binding.mediaViewPager) { tab, position ->
+        tabLayoutMediator = TabLayoutMediator(binding.mediaTab, binding.mediaViewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> getString(R.string.favorite_tracks)
                 else -> getString(R.string.playlists)
             }
-        }.attach()
+        }
+            tabLayoutMediator.attach()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding.mediaTab.clearOnTabSelectedListeners()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        tabLayoutMediator.detach()
     }
 }
 

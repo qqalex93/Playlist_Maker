@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_screen"
     style="@style/ActivitySearch"
+    android:orientation="vertical"
     tools:context=".search.ui.fragment.SearchFragment">
 
     <com.google.android.material.appbar.MaterialToolbar

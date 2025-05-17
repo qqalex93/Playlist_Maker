@@ -3,6 +3,7 @@
     <style name="ActivityMain">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 
     <style name="ActivitySearch" parent="ActivityMain">
@@ -154,11 +155,9 @@
 
     <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="android:background">@color/white</item>
-        <item name="itemTextColor">@color/bottom_navigation_view_item_color</item>
-        <item name="itemIconTint">@color/bottom_navigation_view_item_color</item>
         <item name="itemTextAppearanceActive">@style/BottomNavigationTextStyle</item>
         <item name="itemTextAppearanceInactive">@style/BottomNavigationTextStyle</item>
-        <item name="itemTextAppearanceActiveBoldEnabled">false</item>
+        <item name="itemTextAppearanceActiveBoldEnabled">true</item>
     </style>
 
 

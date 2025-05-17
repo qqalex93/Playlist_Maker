@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.media.presentation.models
 
-sealed class PlaylistScreenState {
-    data object Content: PlaylistScreenState()
-    data object Empty: PlaylistScreenState()
+sealed class PlaylistsScreenState {
+    data object Content: PlaylistsScreenState()
+    data object Empty: PlaylistsScreenState()
 }

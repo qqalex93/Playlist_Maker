@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/media_screen"
     style="@style/ActivityMedia"
+    android:orientation="vertical"
     tools:context=".media.ui.fragment.MediaFragment">
 
     <com.google.android.material.appbar.MaterialToolbar

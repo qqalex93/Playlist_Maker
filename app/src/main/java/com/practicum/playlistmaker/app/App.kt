@@ -27,6 +27,5 @@ class App : Application() {
     companion object {
         const val DI_SETTINGS_SHARED_PREFERENCES = "settings_shared_preference"
         const val DI_HISTORY_SHARED_PREFERENCES = "history_shared_preference"
-        const val TRACK_KEY = "track"
     }
 }

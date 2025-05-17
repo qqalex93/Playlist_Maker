@@ -1,14 +1,13 @@
 package com.practicum.playlistmaker.player.ui
 
-
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
+import androidx.navigation.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.app.App.Companion.TRACK_KEY
 import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.practicum.playlistmaker.player.presentation.model.PlaybackState
 import com.practicum.playlistmaker.player.presentation.model.PlayerTrackInfo
@@ -16,7 +15,6 @@ import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewMode
 
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
-
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -28,12 +26,14 @@ class AudioPlayerActivity : AppCompatActivity() {
         getViewModel { parametersOf(trackId) }
     }
 
+    private val args: AudioPlayerActivityArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        trackId = this.intent.getIntExtra(TRACK_KEY, -1)
+        trackId = args.trackId
 
         binding.apToolbar.setNavigationOnClickListener {
             finish()
@@ -73,13 +73,11 @@ class AudioPlayerActivity : AppCompatActivity() {
     private fun setTrackContent(trackInfo: PlayerTrackInfo) {
 
         val cornerRadius = (this.resources.getDimensionPixelSize(R.dimen.corner_radius_8))
-
         Glide.with(this)
             .load(trackInfo.artworkUrl)
             .transform(RoundedCorners(cornerRadius))
             .centerInside()
             .placeholder(R.drawable.ic_placeholder_cover)
-            .error(R.drawable.ic_placeholder_cover)
             .into(binding.trackCover)
 
         binding.trackNameAp.text = trackInfo.trackName
