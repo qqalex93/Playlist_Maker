@@ -7,47 +7,39 @@ import android.net.NetworkCapabilities
 import com.practicum.playlistmaker.search.data.NetworkClient
 import com.practicum.playlistmaker.search.data.dto.NetworkResponse
 import com.practicum.playlistmaker.search.data.dto.TrackSearchRequest
-import java.io.IOException
 import com.practicum.playlistmaker.search.data.api.TrackApi
 import com.practicum.playlistmaker.search.data.dto.NetworkResponseCode
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RetrofitNetworkClient(
     private val trackApiService: TrackApi,
     private val application: Application
 ) : NetworkClient {
 
-    override fun doRequest(dto: Any): NetworkResponse {
+    override suspend fun doRequest(dto: Any): NetworkResponse {
         if (!isConnected()) {
             return NetworkResponse().apply {
                 resultCode = NetworkResponseCode.NO_CONNECTION
             }
         }
 
-        if (dto is TrackSearchRequest) {
-            val response = try {
-                trackApiService.trackSearch(dto.text).execute()
-            } catch (e: IOException) {
-                null
-            }
-
-            if (response == null) {
-                return NetworkResponse().apply {
-                    resultCode = NetworkResponseCode.ERROR_SERVER
-                }
-            }
-
-            if (response.body() == null) return NetworkResponse().apply {
-                resultCode = NetworkResponseCode.BAD_REQUEST
-            }
-
-            val body = response.body() ?: NetworkResponse()
-
-            return body.apply {
-                resultCode = NetworkResponseCode.SUCCESS
-            }
-        } else {
+        if (dto !is TrackSearchRequest) {
             return NetworkResponse().apply {
                 resultCode = NetworkResponseCode.BAD_REQUEST
+            }
+        }
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = trackApiService.trackSearch(dto.text)
+                response.apply {
+                    resultCode = NetworkResponseCode.SUCCESS
+                }
+            } catch (e: Throwable) {
+                NetworkResponse().apply {
+                    resultCode = NetworkResponseCode.ERROR_SERVER
+                }
             }
         }
     }
