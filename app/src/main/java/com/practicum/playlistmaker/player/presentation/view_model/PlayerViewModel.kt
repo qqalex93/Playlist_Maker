@@ -1,10 +1,9 @@
 package com.practicum.playlistmaker.player.presentation.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.history.domain.api.interactor.TrackHistoryInteractor
 import com.practicum.playlistmaker.player.domain.api.interactor.AudioPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.mapper.PlayerPresenterTrackMapper
@@ -12,20 +11,24 @@ import com.practicum.playlistmaker.player.presentation.model.PlaybackState
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
 import com.practicum.playlistmaker.player.presentation.model.PlayerTrackInfo
 import com.practicum.playlistmaker.search.domain.models.Track
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
     private val trackId: Int,
     private val playerInteractor: AudioPlayerInteractor,
-    private val historyInteractor: TrackHistoryInteractor
+    historyInteractor: TrackHistoryInteractor
 ) : ViewModel() {
     private val playerStateLiveData = MutableLiveData<PlayerState>()
 
     private val trackInfo: PlayerTrackInfo
 
-    private val handler = Handler(Looper.getMainLooper())
     private var playerCurrentPosition: String = DEFAULT_CURRENT_POSITION
+
+    private var timerJob: Job? = null
 
     init {
         val tracks = historyInteractor.getHistory()
@@ -44,23 +47,21 @@ class PlayerViewModel(
             { completionCallback() })
     }
 
-    private val getCurrentPosition = object : Runnable {
-        override fun run() {
-            playerCurrentPosition = progressMap(playerInteractor.getCurrentPosition())
-            updatePlayerState()
-            handler.postDelayed(this, TRACK_TIME_DELAY)
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while ((playerStateLiveData.value?.trackPlaybackState
+                    ?: PlaybackState.NOT_PREPARED) == PlaybackState.PLAYING
+            ) {
+                delay(CURRENT_TRACK_TIME_DELAY)
+                playerCurrentPosition = progressMap(playerInteractor.getCurrentPosition())
+                playerStateLiveData.postValue(
+                    PlayerState(
+                    isError = false,
+                    trackInfo = trackInfo,
+                    trackPlaybackState = PlaybackState.PLAYING,
+                    currentPosition = playerCurrentPosition))
+            }
         }
-    }
-
-    private fun updatePlayerState() {
-        playerStateLiveData.postValue(
-            PlayerState(
-                isError = false,
-                trackInfo = trackInfo,
-                trackPlaybackState = PlaybackState.PLAYING,
-                currentPosition = playerCurrentPosition
-            )
-        )
     }
 
     fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
@@ -84,7 +85,7 @@ class PlayerViewModel(
     }
 
     private fun completionCallback() {
-        handler.removeCallbacks(getCurrentPosition)
+        timerJob?.cancel()
         playerCurrentPosition = DEFAULT_CURRENT_POSITION
         playerStateLiveData.value = PlayerState(
             isError = false,
@@ -103,18 +104,18 @@ class PlayerViewModel(
     }
 
     private fun playerStartCallback() {
-        handler.removeCallbacks(getCurrentPosition)
+        timerJob?.cancel()
         playerStateLiveData.value = PlayerState(
             isError = false,
             trackInfo = trackInfo,
             trackPlaybackState = PlaybackState.PLAYING,
             currentPosition = playerCurrentPosition
         )
-        handler.post(getCurrentPosition)
+        startTimer()
     }
 
     private fun playerPauseCallback() {
-        handler.removeCallbacks(getCurrentPosition)
+        timerJob?.cancel()
         playerStateLiveData.value = PlayerState(
             isError = false,
             trackInfo = trackInfo,
@@ -124,7 +125,7 @@ class PlayerViewModel(
     }
 
     private fun playerErrorCallback() {
-        handler.removeCallbacks(getCurrentPosition)
+        timerJob?.cancel()
         playerCurrentPosition = DEFAULT_CURRENT_POSITION
         playerStateLiveData.value = PlayerState(
             isError = true,
@@ -135,7 +136,6 @@ class PlayerViewModel(
     }
 
     fun playerPause() {
-        handler.removeCallbacks(getCurrentPosition)
         if ((playerStateLiveData.value?.trackPlaybackState == PlaybackState.PLAYING)
         ) {
             playerInteractor.playerPause { playerPauseCallback() }
@@ -150,7 +150,8 @@ class PlayerViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        handler.removeCallbacks(getCurrentPosition)
+        timerJob?.cancel()
+        timerJob = null
         playerInteractor.playerRelease()
     }
 
@@ -161,7 +162,7 @@ class PlayerViewModel(
 
     companion object {
         const val TRACK_TIME_VALUE = "mm:ss"
-        const val TRACK_TIME_DELAY = 300L
+        const val CURRENT_TRACK_TIME_DELAY = 300L
         private const val DEFAULT_CURRENT_POSITION = "00:00"
     }
 }
