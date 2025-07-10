@@ -26,6 +26,10 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="AudioPlayerActivity" parent="ActivityMain">
+        <item name="android:background">@color/white</item>
+    </style>
+
     <style name="TabLayoutStyle">
         <item name="android:background">@color/white</item>
         <item name="tabIndicatorColor">@color/black</item>
