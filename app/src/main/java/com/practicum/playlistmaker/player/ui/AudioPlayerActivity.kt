@@ -75,8 +75,8 @@ class AudioPlayerActivity : AppCompatActivity() {
         val cornerRadius = (this.resources.getDimensionPixelSize(R.dimen.corner_radius_8))
         Glide.with(this)
             .load(trackInfo.artworkUrl)
-            .transform(RoundedCorners(cornerRadius))
             .centerInside()
+            .transform(RoundedCorners(cornerRadius))
             .placeholder(R.drawable.ic_placeholder_cover)
             .into(binding.trackCover)
 
